@@ -1,3 +1,5 @@
+package first_lesson;
+
 public class Task0 {
     public static int checkLength(int[] arr, int minLength) {
         if (arr.length < minLength) {
