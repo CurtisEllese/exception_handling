@@ -61,17 +61,13 @@ public class Task2 {
     public static int sumElements2DArray(int[][] array2D) {
         if (array2D.length != array2D[0].length) throw new RuntimeException("Для работы программы нужен двумерный массив!");
 
-        for (int i = 0; i < array2D.length; i++) {
-            for (int j = 0; j < array2D[i].length; j++) {
-                if (array2D[i][j] != 0 && array2D[i][j] != 1) throw new RuntimeException("Для работы программы массив должен быть бинарный!");
-            }
-        }
-
         int result = 0;
 
-        for (int i = 0; i < array2D.length; i++) {
-            for (int j = 0; j < array2D[i].length; j++) {
-                result += array2D[i][j];
+        for (int[] arr : array2D) {
+            for (int i : arr) {
+                if (i != 0 && i != 1) throw new RuntimeException("Для работы программы массив должен быть бинарный!");
+
+                result += i;
             }
         }
 
