@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="5f6af27e-5382-432c-b9dc-16a5cdf3f542" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/second_lesson/Task4.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/second_lesson/Task4.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,7 +41,33 @@
     &quot;git-widget-placeholder&quot;: &quot;main&quot;
   }
 }</component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Printer">
+    <configuration name="H" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="second_lesson.H" />
+      <module name="exception_handling" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="second_lesson.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Printer" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="second_lesson.Printer" />
+      <module name="exception_handling" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="second_lesson.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="Task3" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="first_lesson.Task3" />
       <module name="exception_handling" />
@@ -58,6 +83,8 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Printer" />
+        <item itemvalue="Application.H" />
         <item itemvalue="Application.Task3" />
       </list>
     </recent_temporary>
