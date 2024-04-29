@@ -10,8 +10,9 @@ package third_lesson.task_8;
 public class Task8 {
     public static void main(String[] args) {
 //        String[][] myArr = new String[][] {{"123", "1"}, {"123", "1"}, {"123", "1"}};
+//        String[][] myArr = new String[][] {{"123", "1", "5", "6"}, {"fdsfg", "1", "5", "6"}, {"3", "1", "5", "6"}, {"8", "7", "5", "6"}};
 
-        String[][] myArr = new String[][] {{"123", "1", "5", "6"}, {"dfs", "1", "5", "6"}, {"3", "1", "5", "6"}, {"8", "7", "5", "6"}};
+        String[][] myArr = new String[][] {{"123", "1", "5", "6"}, {"4", "1", "5", "6"}, {"3", "1", "5", "6"}, {"8", "7", "5", "6"}};
 
         try {
             int sum = Array2DElementsSum(myArr);
