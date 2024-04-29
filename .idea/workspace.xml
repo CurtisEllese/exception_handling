@@ -41,7 +41,7 @@
     &quot;git-widget-placeholder&quot;: &quot;main&quot;
   }
 }</component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Task8">
     <configuration name="H" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="second_lesson.H" />
       <module name="exception_handling" />
@@ -81,8 +81,22 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Task8" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="third_lesson.task_8.Task8" />
+      <module name="exception_handling" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="third_lesson.task_8.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Task8" />
         <item itemvalue="Application.Printer" />
         <item itemvalue="Application.H" />
         <item itemvalue="Application.Task3" />
