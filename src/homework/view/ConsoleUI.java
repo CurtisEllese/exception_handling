@@ -1,5 +1,6 @@
 package homework.view;
 
+import homework.model.FullName;
 import homework.presenter.Presenter;
 
 import java.util.Scanner;
@@ -10,7 +11,6 @@ public class ConsoleUI implements View{
     private boolean flag;
 
     public ConsoleUI() {
-        presenter = new Presenter(this);
         scanner = new Scanner(System.in);
         flag = true;
     }
@@ -19,8 +19,34 @@ public class ConsoleUI implements View{
     public void start() {
         while(flag) {
             printMenu();
-
+            handleEnteredInput();
         }
+    }
+
+
+
+    private void handleEnteredInput() {
+        String enteredString = scanner.nextLine();
+
+        int resultValueAmountCode = checkStringValuesAmount(enteredString);
+        printAnswer(valueAmountErrorHandle(resultValueAmountCode));
+
+        if (resultValueAmountCode == 0) {
+            flag = false;
+            presenter = new Presenter(this, enteredString);
+        }
+    }
+
+    private int checkStringValuesAmount(String enteredString) {
+        String[] enteredValues = enteredString.split(";");
+
+        if (enteredValues.length == 4) {
+            return 0;
+        } else if (enteredValues.length < 4){
+            return -1;
+        } else if (enteredValues.length > 4){
+            return 1;
+        } else return -2;
     }
 
     private void printMenu() {
@@ -34,8 +60,16 @@ public class ConsoleUI implements View{
         System.out.println("m - мужской пол");
     }
 
+    private String valueAmountErrorHandle(int errCode) {
+        if (errCode == 0) return "Проверка на количество аргументов прошла успешно...";
+        else if (errCode == 1) return "\nВведено слишком много аргументов в строке.\nАргументы должны отделятся символом ';'\n";
+        else if (errCode == -1) return "\nВведено слишком мало аргументов в строке.\nАргументы должны отделятся символом ';'\n";
+        else return "\nВведено неверное количество аргументов в строке.\nАргументы должны отделятся символом ';'\n";
+    }
+
     @Override
     public void printAnswer(String answer) {
         System.out.println(answer);
     }
+
 }

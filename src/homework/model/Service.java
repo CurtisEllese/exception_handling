@@ -1,9 +1,17 @@
 package homework.model;
 
 
-import java.io.BufferedWriter;
+import homework.exceptions.IncorrectDateException;
+import homework.exceptions.IncorrectSexException;
+import homework.exceptions.NoFullNameException;
+import homework.exceptions.NoPhoneNumException;
+
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Service {
     private String surname;
@@ -12,16 +20,17 @@ public class Service {
     private PhoneNumber phoneNumber;
     private Sex sex;
     private String[] userData;
+    String currentDirectory = System.getProperty("user.dir");
 
     public Service(String userInput) {
         parseUserInput(userInput);
     }
 
-    public void parseUserInput(String userInput) {
+    private void parseUserInput(String userInput) {
         this.userData = userInput.split(";");
     }
 
-    public void getFullNameFromInput() {
+    public void getFullNameFromInput() throws NoFullNameException {
         for (int i = 0; i < userData.length; i++) {
             if (userData[i].length() > 1 && !containDigits(userData[i])) {
                 fullName = new FullName(userData[i]);
@@ -30,27 +39,60 @@ public class Service {
         }
     }
 
-    public void getDateOfBirthFromInput() {
-        int charPos = -1;
+    public void getDateOfBirthFromInput() throws IncorrectDateException {
         for (int i = 0; i < userData.length; i++) {
-            charPos = userData[i].indexOf('.');
-            if (userData[i].length() > 1 && containDigits(userData[i]) && charPos != -1) {
-                dateOfBirth = new DateOfBirth(userData[i]);
-                return;
+            try {
+                if (isValidDateFormat(userData[i])) {
+                    dateOfBirth = new DateOfBirth(userData[i]);
+                    return;
+                }
+            } catch (ParseException e) {
+                throw new IncorrectDateException();
             }
+        }
+
+    }
+
+
+    private boolean isValidDateFormat(String dateStr) throws ParseException {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+        sdf.setLenient(false);
+        try {
+            Date date = sdf.parse(dateStr);
+            return true;
+        } catch (ParseException e) {
+            return false;
+        }
+    }
+    public void setSurname() {
+        try {
+            this.surname = fullName.getSurname();
+        } catch (NoFullNameException e) {
+            e.getMessage();
         }
     }
 
-    public void setSurname() {
-        this.surname = fullName.getSurname();
-    }
-
     public String getFullName() {
-        return fullName.getFullName();
+        try {
+            return fullName.getFullName();
+        } catch (NoFullNameException e) {
+            e.getMessage();
+        }
+        return null;
     }
 
     public String getDateOfBirth() {
-        return dateOfBirth.getDate();
+        try {
+            checkDate();
+            return dateOfBirth.getDate();
+        } catch (IncorrectDateException e) {
+            e.getMessage();
+        }
+        return null;
+    }
+
+    private void checkDate() {
+        if (dateOfBirth.getDate() == null) throw new IncorrectDateException();
     }
 
     public void getPhoneNumFromInput() {
@@ -102,12 +144,20 @@ public class Service {
         return sb.toString();
     }
 
-    public void writeToFile() throws IOException {
-        FileWriter file = new FileWriter(surname);
-        BufferedWriter writer = new BufferedWriter(file);
+    public void writeToFile() {
+        try (FileWriter writer = new FileWriter(currentDirectory + File.separator + checkSurname(), true)){
+            writer.write(createDataString() + "\n");
+        } catch (IOException e) {
+            System.out.println("Ошибка записи в файл: " + e.getMessage());
+        } catch (NoFullNameException e) {
+            System.out.println("Ошибка записи в файл. Не предоставлено полное имя");
+        } catch (IncorrectDateException e) {
+            System.out.println("Ошибка записи в файл. Неверный формат даты");
+        }
+    }
 
-        writer.write(createDataString() + "\n");
-
-        writer.close();
+    private String checkSurname() {
+        if (surname == null) throw new NoFullNameException();
+        else return surname;
     }
 }
