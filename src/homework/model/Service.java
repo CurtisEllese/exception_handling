@@ -6,12 +6,18 @@ import homework.exceptions.IncorrectSexException;
 import homework.exceptions.NoFullNameException;
 import homework.exceptions.NoPhoneNumException;
 
+import javax.swing.text.DateFormatter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Objects;
 
 public class Service {
     private String surname;
@@ -24,6 +30,12 @@ public class Service {
 
     public Service(String userInput) {
         parseUserInput(userInput);
+
+        getFullNameFromInput();
+        getDateOfBirthFromInput();
+        setSurname();
+        getPhoneNumFromInput();
+        getSexFromInput();
     }
 
     private void parseUserInput(String userInput) {
@@ -32,8 +44,8 @@ public class Service {
 
     public void getFullNameFromInput() throws NoFullNameException {
         for (int i = 0; i < userData.length; i++) {
-            if (userData[i].length() > 1 && !containDigits(userData[i])) {
-                fullName = new FullName(userData[i]);
+            if (userData[i].strip().length() > 1 && !containDigits(userData[i])) {
+                fullName = new FullName(userData[i].strip());
                 return;
             }
         }
@@ -41,29 +53,25 @@ public class Service {
 
     public void getDateOfBirthFromInput() throws IncorrectDateException {
         for (int i = 0; i < userData.length; i++) {
-            try {
-                if (isValidDateFormat(userData[i])) {
-                    dateOfBirth = new DateOfBirth(userData[i]);
-                    return;
-                }
-            } catch (ParseException e) {
-                throw new IncorrectDateException();
+            if (isDateValid(userData[i].strip())) {
+                dateOfBirth = new DateOfBirth(userData[i].strip());
+                break;
             }
         }
-
     }
 
 
-    private boolean isValidDateFormat(String dateStr) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-        sdf.setLenient(false);
-        try {
-            Date date = sdf.parse(dateStr);
+
+    public static boolean isDateValid(String date) {
+        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            try {
+                LocalDate.parse(date, dateFormatter);
+            } catch (DateTimeParseException e) {
+                return false;
+            }
             return true;
-        } catch (ParseException e) {
-            return false;
         }
-    }
+
     public void setSurname() {
         try {
             this.surname = fullName.getSurname();
@@ -76,31 +84,42 @@ public class Service {
         try {
             return fullName.getFullName();
         } catch (NoFullNameException e) {
-            e.getMessage();
+            System.out.println(e.getMessage());
         }
         return null;
     }
 
     public String getDateOfBirth() {
         try {
-            checkDate();
-            return dateOfBirth.getDate();
-        } catch (IncorrectDateException e) {
-            e.getMessage();
+            dateOfBirth.getDate();
+        } catch (NullPointerException e) {
+            System.out.println("Дата введена в неверном формате");
         }
-        return null;
+        return dateOfBirth.getDate();
     }
 
-    private void checkDate() {
-        if (dateOfBirth.getDate() == null) throw new IncorrectDateException();
-    }
 
     public void getPhoneNumFromInput() {
         for (int i = 0; i < userData.length; i++) {
-            if (userData[i].length() > 1 && containDigits(userData[i]) && !userData[i].contains(".")) {
-                phoneNumber = new PhoneNumber(userData[i]);
-                return;
+            String value = userData[i].strip();
+
+            if (value.length() > 1 && containDigits(value) && !value.contains(".")) {
+                try {
+                    checkPhoneNum(value);
+                    phoneNumber = new PhoneNumber(value);
+                    return;
+                } catch (NoPhoneNumException e) {
+                    System.out.println(e.getMessage());
+                }
             }
+        }
+    }
+
+    private void checkPhoneNum(String value) throws NoPhoneNumException {
+        try {
+            Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            throw new NoPhoneNumException();
         }
     }
 
@@ -110,15 +129,19 @@ public class Service {
 
     public void getSexFromInput() {
         for (int i = 0; i < userData.length; i++) {
-            if (userData[i].length() == 1) {
-                sex = new Sex(userData[i]);
+            if (userData[i].strip().length() == 1) {
+                sex = new Sex(userData[i].strip());
                 return;
             }
         }
     }
 
     public String getSex() {
-        return sex.getSex();
+        if (Objects.equals(sex.getSex(), "f") || Objects.equals(sex.getSex(), "m")) {
+            return sex.getSex();
+        } else {
+            throw new IncorrectSexException();
+        }
     }
 
     public boolean containDigits(String string) {
@@ -132,14 +155,40 @@ public class Service {
 
     public String createDataString() {
         StringBuilder sb = new StringBuilder();
+        if (getFullName() != null) {
+            sb.append(getFullName());
+            sb.append(" ");
+        } else {
+            return null;
+        }
 
-        sb.append(getFullName());
-        sb.append(" ");
-        sb.append(getDateOfBirth());
-        sb.append(" ");
-        sb.append(getPhoneNumber());
-        sb.append(" ");
-        sb.append(getSex());
+        if (getDateOfBirth() != null) {
+            sb.append(getDateOfBirth());
+            sb.append(" ");
+        } else {
+            return null;
+        }
+
+        if (getPhoneNumber() != null) {
+            sb.append(getPhoneNumber());
+            sb.append(" ");
+        } else {
+            return null;
+        }
+
+        if (getSex() != null) {
+            try {
+                if (Objects.equals(getSex(), "f")) {
+                    sb.append("женский пол");
+                } else if (Objects.equals(getSex(), "m")) {
+                    sb.append("мужской пол");
+                }
+            } catch (IncorrectSexException e) {
+                System.out.println(e.getMessage());
+            }
+        } else {
+            return null;
+        }
 
         return sb.toString();
     }
@@ -147,12 +196,11 @@ public class Service {
     public void writeToFile() {
         try (FileWriter writer = new FileWriter(currentDirectory + File.separator + checkSurname(), true)){
             writer.write(createDataString() + "\n");
+            System.out.println("Данные записаны в файл успешно!");
         } catch (IOException e) {
             System.out.println("Ошибка записи в файл: " + e.getMessage());
-        } catch (NoFullNameException e) {
-            System.out.println("Ошибка записи в файл. Не предоставлено полное имя");
-        } catch (IncorrectDateException e) {
-            System.out.println("Ошибка записи в файл. Неверный формат даты");
+        } catch (NullPointerException e) {
+            System.out.println("Данные не записаны в файл, введите корректные данные");
         }
     }
 

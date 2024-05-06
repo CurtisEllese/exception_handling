@@ -16,20 +16,11 @@ public class Presenter {
         try {
             program();
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            System.out.println(e.getMessage());
         }
     }
 
     private void program() throws IOException {
-        service.getFullNameFromInput();
-        try {
-            service.getDateOfBirthFromInput();
-        } catch (IncorrectDateException e) {
-            System.out.println(e.getMessage());
-        }
-        service.setSurname();
-        service.getPhoneNumFromInput();
-        service.getSexFromInput();
         service.writeToFile();
     }
 }

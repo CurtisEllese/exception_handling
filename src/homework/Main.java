@@ -8,5 +8,6 @@ public class Main {
         View consoleUI = new ConsoleUI();
 
         consoleUI.start();
+        //TODO: проверку даты на правильность
     }
 }
