@@ -1,7 +1,6 @@
 package homework.model;
 
 import homework.exceptions.NoFullNameException;
-import homework.exceptions.NoPhoneNumException;
 
 public class FullName {
     private String fullName;

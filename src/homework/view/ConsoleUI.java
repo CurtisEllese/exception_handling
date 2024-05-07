@@ -1,6 +1,5 @@
 package homework.view;
 
-import homework.model.FullName;
 import homework.presenter.Presenter;
 
 import java.util.Scanner;

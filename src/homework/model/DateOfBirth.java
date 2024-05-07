@@ -1,6 +1,5 @@
 package homework.model;
 
-import homework.exceptions.IncorrectDateException;
 
 public class DateOfBirth {
     private String date;
